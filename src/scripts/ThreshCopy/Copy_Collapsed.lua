@@ -1,6 +1,7 @@
 ThreshCopy = ThreshCopy or {
   AppName = "ThreshCopy",
-  InstallHandler = nil
+  InstallHandler = nil,
+  UninstallHandler = nil
 }
 
 function ThreshCopy:getSelectedText(window, startCol, startRow, endCol, endRow)
@@ -80,17 +81,17 @@ function ThreshCopy:Install(_, package)
     print("Right-click selected text in the output pane for copy functions.")
   end
 end
-ThreshCopy.installHandler = ThreshCopy.installHandler or registerAnonymousEventHandler("sysInstallPackage", "ThreshCopy:Install")
+ThreshCopy.InstallHandler = ThreshCopy.InstallHandler or registerAnonymousEventHandler("sysInstallPackage", "ThreshCopy:Install")
 
 function ThreshCopy:Uninstall(_, package)
   if package == self.AppName then
-    if self.uninstallHandler ~= nil then killAnonymousEventHandler(self.uninstallHandler) end
+    if self.UninstallHandler ~= nil then killAnonymousEventHandler(self.UninstallHandler) end
     self:disableHandlers()
-    self.uninstallHandler = nil
+    self.UninstallHandler = nil
     cecho(f"<red>You have uninstalled {self.AppName}.\n")
   end
 end
-ThreshCopy.uninstallHandler = ThreshCopy.uninstallHandler or registerAnonymousEventHandler("sysInstallPackage", "ThreshCopy:Uninstall")
+ThreshCopy.UninstallHandler = ThreshCopy.UninstallHandler or registerAnonymousEventHandler("sysUninstallPackage", "ThreshCopy:Uninstall")
 
 -- Start it up
 ThreshCopy:enableHandlers()
