@@ -7,3 +7,6 @@ build/
 # This utility file is specific to individual developers and should not be
 # included in the repo
 /muddle*
+
+# Ignoring anything in .vscode
+/.vscode/
