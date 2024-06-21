@@ -1,4 +1,9 @@
-local function getSelectedText(window, startCol, startRow, endCol, endRow)
+ThreshCopy = ThreshCopy or {
+  AppName = "ThreshCopy",
+  InstallHandler = nil
+}
+
+function ThreshCopy:getSelectedText(window, startCol, startRow, endCol, endRow)
   -- Check whether there's an actual selection
   if startCol == endCol and startRow == endRow then return "" end
   local parsed = ""
@@ -14,12 +19,12 @@ local function getSelectedText(window, startCol, startRow, endCol, endRow)
   return parsed
 end
 
-local function trim(s)
+function ThreshCopy:trim(s)
   return s:match("^%s*(.-)%s*$")
 end
 
-local handler = function(event, menu, ...)
-  local text = getSelectedText(...)
+ThreshCopy.handler = function(event, menu, ...)
+  local text = ThreshCopy:getSelectedText(...)
   -- Split the text into lines, trim each line, and handle blank lines separately
   local lines = {}
   for line in text:gmatch("([^\n]*)\n?") do
@@ -56,36 +61,36 @@ end
 -- HANDLERS
 -- ------------------------------------------------------------------- --
 
-function ThreshCopy.enableHandlers()
+function ThreshCopy:enableHandlers()
   addMouseEvent("Copy Collapsed", "copyWithoutNewLines")
-  registerNamedEventHandler("threshcopy", "copy without new lines", "copyWithoutNewLines", handler)
+  registerNamedEventHandler("threshcopy", "copy without new lines", "copyWithoutNewLines", self.handler)
 end
 
-function ThreshCopy.disableHandlers()
+function ThreshCopy:disableHandlers()
     removeMouseEvent("Copy Collapsed")
     stopNamedEventHandler("threshcopy", "copy without new lines")
 end
 
-function ThreshCopy.Install(_, package)
-  if package == ThreshCopy.AppName then
-    if ThreshCopy.installHandler ~= nil then killAnonymousEventHandler(ThreshCopy.installHandler) end
-    ThreshCopy.enableHandlers()
-    ThreshCopy.installHandler = nil
-    print("Thank you for installing ThreshCopy! 😄😁😆😍\n")
-    print("Right-click selected text in the output pane for copy functions.\n")
+function ThreshCopy:Install(_, package)
+  if package == self.AppName then
+    if self.InstallHandler ~= nil then killAnonymousEventHandler(ThreshCopy.InstallHandler) end
+    self:enableHandlers()
+    self.InstallHandler = nil
+    print(f"Thank you for installing {self.AppName}!")
+    print("Right-click selected text in the output pane for copy functions.")
   end
 end
-ThreshCopy.installHandler = ThreshCopy.installHandler or registerAnonymousEventHandler("sysInstallPackage", ThreshCopy.Install)
+ThreshCopy.installHandler = ThreshCopy.installHandler or registerAnonymousEventHandler("sysInstallPackage", "ThreshCopy:Install")
 
-function ThreshCopy.Uninstall(_, package)
-  if package == ThreshCopy.AppName then
-    if ThreshCopy.uninstallHandler ~= nil then killAnonymousEventHandler(ThreshCopy.uninstallHandler) end
-    ThreshCopy.disableHandlers()
-    ThreshCopy.uninstallHandler = nil
-    cecho("\n<red>You have uninstalled ThreshCopy. 😔️😥😢\n")
+function ThreshCopy:Uninstall(_, package)
+  if package == self.AppName then
+    if self.uninstallHandler ~= nil then killAnonymousEventHandler(self.uninstallHandler) end
+    self:disableHandlers()
+    self.uninstallHandler = nil
+    cecho(f"<red>You have uninstalled {self.AppName}.\n")
   end
 end
-ThreshCopy.uninstallHandler = ThreshCopy.uninstallHandler or registerAnonymousEventHandler("sysUninstallPackage", ThreshCopy.Uninstall)
+ThreshCopy.uninstallHandler = ThreshCopy.uninstallHandler or registerAnonymousEventHandler("sysInstallPackage", "ThreshCopy:Uninstall")
 
 -- Start it up
-ThreshCopy.enableHandlers()
+ThreshCopy:enableHandlers()
