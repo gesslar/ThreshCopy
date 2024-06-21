@@ -32,7 +32,7 @@ ThreshCopy.handler = function(event, menu, ...)
     if line == "" then
       table.insert(lines, "")
     else
-      table.insert(lines, trim(line))
+      table.insert(lines, ThreshCopy:trim(line))
     end
   end
 
