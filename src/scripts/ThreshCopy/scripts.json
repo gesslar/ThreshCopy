@@ -1,0 +1,14 @@
+[
+       {
+              "isActive": "yes",
+              "isFolder": "no",
+              "name": "Copy Collapsed",
+              "script": ""
+       },
+       {
+              "isActive": "no",
+              "isFolder": "no",
+              "name": "Copy Wrapped",
+              "script": ""
+       }
+]
