@@ -1,10 +1,9 @@
-ThreshCopy = ThreshCopy or {
-  AppName = "ThreshCopy",
+__PKGNAME__ = __PKGNAME__ or {
   InstallHandler = nil,
   UninstallHandler = nil
 }
 
-function ThreshCopy:getSelectedText(window, startCol, startRow, endCol, endRow)
+function __PKGNAME__:getSelectedText(window, startCol, startRow, endCol, endRow)
   -- Check whether there's an actual selection
   if startCol == endCol and startRow == endRow then return "" end
   local parsed = ""
@@ -20,19 +19,19 @@ function ThreshCopy:getSelectedText(window, startCol, startRow, endCol, endRow)
   return parsed
 end
 
-function ThreshCopy:trim(s)
+function __PKGNAME__:trim(s)
   return s:match("^%s*(.-)%s*$")
 end
 
-ThreshCopy.handler = function(event, menu, ...)
-  local text = ThreshCopy:getSelectedText(...)
+__PKGNAME__.handler = function(event, menu, ...)
+  local text = __PKGNAME__:getSelectedText(...)
   -- Split the text into lines, trim each line, and handle blank lines separately
   local lines = {}
   for line in text:gmatch("([^\n]*)\n?") do
     if line == "" then
       table.insert(lines, "")
     else
-      table.insert(lines, ThreshCopy:trim(line))
+      table.insert(lines, __PKGNAME__:trim(line))
     end
   end
 
@@ -62,46 +61,46 @@ end
 -- HANDLERS
 -- ------------------------------------------------------------------- --
 
-function ThreshCopy:enableHandlers()
+function __PKGNAME__:enableHandlers()
   addMouseEvent("Copy Collapsed", "copyWithoutNewLines")
-  registerNamedEventHandler("threshcopy", "copy without new lines", "copyWithoutNewLines", self.handler)
+  registerNamedEventHandler("__PKGNAME__", "copy without new lines", "copyWithoutNewLines", self.handler)
 end
 
-function ThreshCopy:disableHandlers()
+function __PKGNAME__:disableHandlers()
     removeMouseEvent("Copy Collapsed")
-    stopNamedEventHandler("threshcopy", "copy without new lines")
+    stopNamedEventHandler("__PKGNAME__", "copy without new lines")
 end
 
-function ThreshCopy:Install(_, package)
-  if package == self.AppName then
-    if self.InstallHandler ~= nil then killAnonymousEventHandler(ThreshCopy.InstallHandler) end
+function __PKGNAME__:Install(_, package)
+  if package == "__PKGNAME__" then
+    if self.InstallHandler ~= nil then killAnonymousEventHandler(__PKGNAME__.InstallHandler) end
     self:enableHandlers()
     self.InstallHandler = nil
-    print(f"Thank you for installing {self.AppName}!")
+    print(f"Thank you for installing __PKGNAME__!")
     print("Right-click selected text in the output pane for copy functions.")
   end
 end
-ThreshCopy.InstallHandler = ThreshCopy.InstallHandler or registerAnonymousEventHandler("sysInstallPackage", "ThreshCopy:Install")
+__PKGNAME__.InstallHandler = __PKGNAME__.InstallHandler or registerAnonymousEventHandler("sysInstallPackage", "__PKGNAME__:Install")
 
-function ThreshCopy:Uninstall(_, package)
-  if package == self.AppName then
+function __PKGNAME__:Uninstall(_, package)
+  if package == "__PKGNAME__" then
     if self.UninstallHandler ~= nil then killAnonymousEventHandler(self.UninstallHandler) end
     self:disableHandlers()
     self.UninstallHandler = nil
-    cecho(f"<red>You have uninstalled {self.AppName}.\n")
+    cecho(f"<red>You have uninstalled __PKGNAME__.\n")
   end
 end
-ThreshCopy.UninstallHandler = ThreshCopy.UninstallHandler or registerAnonymousEventHandler("sysUninstallPackage", "ThreshCopy:Uninstall")
+__PKGNAME__.UninstallHandler = __PKGNAME__.UninstallHandler or registerAnonymousEventHandler("sysUninstallPackage", "__PKGNAME__:Uninstall")
 
 -- Auto Updater
-function ThreshCopy:Loaded()
-    require(ThreshCopy.AppName .. "\\Mupdate")
+function __PKGNAME__:Loaded(_, package)
+    require(f"__PKGNAME__\\Mupdate")
 
     if not Mupdate then return end
 
     local updater = Mupdate:new({
-        download_path = "https://github.com/gesslar/ThreshCopy/releases/latest/download/",
-        package_name = ThreshCopy.AppName,
+        download_path = "https://github.com/gesslar/__PKGNAME__/releases/latest/download/",
+        package_name = "__PKGNAME__",
         version_check_download = "version.txt",
         version_check_save = "version.txt",
     })
@@ -110,5 +109,5 @@ function ThreshCopy:Loaded()
 end
 
 -- Start it up
-ThreshCopy:enableHandlers()
-ThreshCopy.LoadHandler = ThreshCopy.LoadHandler or registerAnonymousEventHandler("sysLoadEvent", "ThreshCopy:Loaded")
+__PKGNAME__:enableHandlers()
+__PKGNAME__.LoadHandler = __PKGNAME__.LoadHandler or registerAnonymousEventHandler("sysLoadEvent", "__PKGNAME__:Loaded")
