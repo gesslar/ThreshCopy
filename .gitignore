@@ -8,5 +8,6 @@ build/
 # included in the repo
 /muddle*
 
-# Ignoring anything in .vscode
-/.vscode/
+# Ignoring Resources Mupdate.lua, as this will be brought in automatically
+# by a task.
+/src/resources/Mupdate.lua
