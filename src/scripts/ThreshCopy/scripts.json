@@ -10,11 +10,5 @@
               "isFolder": "no",
               "name": "Copy Wrapped",
               "script": ""
-       },
-       {
-              "isActive": "yes",
-              "isFolder": "no",
-              "name": "Updates",
-              "script": ""
        }
 ]
