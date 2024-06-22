@@ -2,7 +2,7 @@
        "package": "ThreshCopy",
        "title": "Convenient copy functions for ThresholdRPG",
        "description": "Convenient copy functions for ThresholdRPG",
-       "version": "1.1.11",
+       "version": "1.1.12",
        "author": "Gesslar@ThresholdRPG",
        "icon": "griffon-right.jpg",
        "dependencies": "",
