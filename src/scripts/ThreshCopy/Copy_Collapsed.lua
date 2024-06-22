@@ -99,9 +99,7 @@ function __PKGNAME__:Loaded(_, package)
 end
 
 function __PKGNAME__:Update()
-  require(f"__PKGNAME__\\Mupdate")
-
-  if not Mupdate then return end
+  require("__PKGNAME__\\Mupdate")
 
   local updater = Mupdate:new({
       download_path = "https://github.com/gesslar/__PKGNAME__/releases/latest/download/",
