@@ -36,7 +36,7 @@ jobs:
       - name: Build With Muddler
         # You may pin to the exact commit or the version.
         # uses: demonnic/build-with-muddler@a9355b3c4f93553287e0f2d4087508b9f6164225
-        uses: demonnic/build-with-muddler@v1.4
+        uses: demonnic/build-with-muddler@main
         with:
           # Version of muddler to use
           muddlerVersion: LATEST # optional, default is LATEST
