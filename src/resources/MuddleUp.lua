@@ -47,13 +47,27 @@ function MuddleUp:new(options)
     me.package_url = me.download_path .. me.package_name .. ".mpackage"
     me.version_url = me.download_path .. me.version_check_download
 
+    local packageInfo = getPackageInfo(me.package_name)
+    if not packageInfo then
+        error("MuddleUp:new() - Package " .. me.package_name .. " not found")
+    end
+    if not packageInfo.version then
+        error("MuddleUp:new() - Package " .. me.package_name .. " does not have a version")
+    end
+
+    me.current_version = packageInfo.version
+
     me.initialized = true
     me.downloading = false
     me.download_queue = {} -- Ensure download_queue is initialized as an empty table
     debugc("MuddleUp:new() - Initialized download_queue")
 
-    registerNamedEventHandler(me.package_name, "DownloadComplete", "sysDownloadDone", function(...) me:eventHandler("sysDownloadDone", ...) end)
-    registerNamedEventHandler(me.package_name, "DownloadError", "sysDownloadError", function(...) me:eventHandler("sysDownloadError", ...) end)
+    registerNamedEventHandler(me.package_name, "DownloadComplete", "sysDownloadDone", function(...)
+        me:eventHandler("sysDownloadDone", ...)
+    end)
+    registerNamedEventHandler(me.package_name, "DownloadError", "sysDownloadError", function(...)
+        me:eventHandler("sysDownloadError", ...)
+    end)
 
     return me
 end
@@ -173,11 +187,11 @@ end
 
 function MuddleUp:finish_download(path)
     self:start_next_download()
-debugc("MuddleUp:finish_download() - Finished downloading " .. path)
-debugc("MuddleUp:finish_download() - Checking if downloaded file is version info file")
-debugc("MuddleUp:finish_download() - " .. self.version_check_save)
+    debugc("MuddleUp:finish_download() - Finished downloading " .. path)
+    debugc("MuddleUp:finish_download() - Checking if downloaded file is version info file")
+
     -- Check if the downloaded file is the version info file
-    if string.find(path, self.version_check_save) then
+    if string.find(path, self.file_path .. self.version_check_save) then
         self:check_versions()
     elseif string.find(path, ".mpackage") then
         self:load_package_mpackage(path)
@@ -238,23 +252,24 @@ function MuddleUp:get_version_check()
     lfs.mkdir(self.file_path)
     debugc("MuddleUp:get_version_check() - Getting version check file")
     debugc("MuddleUp:get_version_check() - " .. self.version_url)
-    debugc("MuddleUp:get_version_check() - " .. self.version_check_save)
+    debugc("MuddleUp:get_version_check() - " .. self.file_path .. self.version_check_save)
 
+    -- Ensure the version file is saved in the correct directory
     self:queue_download(
-        self.version_check_save, -- Local path to save the file
-        self.version_url         -- Remote URL to download from
+        self.file_path .. self.version_check_save, -- Local path to save the file
+        self.version_url                           -- Remote URL to download from
     )
 end
 
 function MuddleUp:check_versions()
-    local dl_path = self.version_check_save
+    local dl_path = self.file_path .. self.version_check_save
     local dl_file, dl_errors = self:fileOpen(dl_path, "read")
     if not dl_file then
         cecho("\n<b><ansiLightRed>ERROR</b><reset> - Could not read remote version info file, aborting auto-update routine. (" .. dl_errors .. ")\n")
         return
     end
 
-    local curr_version = getPackageInfo(self.package_name, "version")
+    local curr_version = self.current_version
     local dl_version = dl_file.contents[1]
     cecho("\n<b><ansiLightYellow>INFO</b><reset> - installed " .. curr_version .. "; remote " .. dl_version .. ";\n")
 
