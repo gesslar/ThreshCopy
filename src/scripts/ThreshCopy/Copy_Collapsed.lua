@@ -95,7 +95,7 @@ __PKGNAME__.UninstallHandler = __PKGNAME__.UninstallHandler or registerAnonymous
 -- Auto Updater
 function __PKGNAME__:Loaded(_, package)
   -- Delay the update for 2 seconds.
-  tempTimer(2, "__PKGNAME__:Update")
+  tempTimer(2, function() __PKGNAME__:Update() end)
 end
 
 function __PKGNAME__:Update()
