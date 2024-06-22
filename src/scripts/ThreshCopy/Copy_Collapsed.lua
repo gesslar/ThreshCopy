@@ -94,18 +94,23 @@ __PKGNAME__.UninstallHandler = __PKGNAME__.UninstallHandler or registerAnonymous
 
 -- Auto Updater
 function __PKGNAME__:Loaded(_, package)
-    require(f"__PKGNAME__\\Mupdate")
+  -- Delay the update for 2 seconds.
+  tempTimer(2, "__PKGNAME__:Update")
+end
 
-    if not Mupdate then return end
+function __PKGNAME__:Update()
+  require(f"__PKGNAME__\\Mupdate")
 
-    local updater = Mupdate:new({
-        download_path = "https://github.com/gesslar/__PKGNAME__/releases/latest/download/",
-        package_name = "__PKGNAME__",
-        version_check_download = "version.txt",
-        version_check_save = "version.txt",
-    })
+  if not Mupdate then return end
 
-    updater:Start()
+  local updater = Mupdate:new({
+      download_path = "https://github.com/gesslar/__PKGNAME__/releases/latest/download/",
+      package_name = "__PKGNAME__",
+      version_check_download = "version.txt",
+      version_check_save = "version.txt",
+  })
+
+  updater:Start()
 end
 
 -- Start it up

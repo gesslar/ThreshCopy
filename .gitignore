@@ -7,7 +7,3 @@ build/
 # This utility file is specific to individual developers and should not be
 # included in the repo
 /muddle*
-
-# Ignoring Resources Mupdate.lua, as this will be brought in automatically
-# by a task.
-/src/resources/Mupdate.lua
