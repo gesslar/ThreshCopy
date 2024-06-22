@@ -4,7 +4,7 @@
     {
       "label": "Update Mupdate Submodule",
       "type": "shell",
-      "command": "git submodule update --remote && mkdir -p resources && cp submodule/Mupdate/Mupdate.lua src/resources/Mupdate.lua",
+      "command": "git submodule update --remote && mkdir -p src/resources && cp submodule/Mupdate/Mupdate.lua src/resources/Mupdate.lua",
       "problemMatcher": [],
       "presentation": {
         "echo": true,
