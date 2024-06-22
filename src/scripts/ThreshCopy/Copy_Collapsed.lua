@@ -93,5 +93,19 @@ function ThreshCopy:Uninstall(_, package)
 end
 ThreshCopy.UninstallHandler = ThreshCopy.UninstallHandler or registerAnonymousEventHandler("sysUninstallPackage", "ThreshCopy:Uninstall")
 
+-- Auto Updater
+function ThreshCopy:Loaded()
+    local options = {
+        download_path = "https://github.com/gesslar/ThreshCopy/releases/latest/download/",
+        package_name = ThreshCopy.AppName,
+        version_check_download = "version.txt",
+        version_check_save = "version.txt",
+    }
+    require(ThreshCopy.AppName .. "\\MuddleUp")
+    local updater = MuddleUp:new(options)
+    updater:Start()
+end
+
 -- Start it up
 ThreshCopy:enableHandlers()
+ThreshCopy.LoadHandler = ThreshCopy.LoadHandler or registerAnonymousEventHandler("sysLoadEvent", "ThreshCopy:Loaded")
