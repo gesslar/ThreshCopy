@@ -1,6 +1,7 @@
 __PKGNAME__ = __PKGNAME__ or {
   InstallHandler = nil,
-  UninstallHandler = nil
+  UninstallHandler = nil,
+  LoadHandler = nil,
 }
 
 function __PKGNAME__:getSelectedText(window, startCol, startRow, endCol, endRow)
@@ -74,7 +75,6 @@ end
 function __PKGNAME__:Install(_, package)
   if package == "__PKGNAME__" then
     if self.InstallHandler ~= nil then killAnonymousEventHandler(__PKGNAME__.InstallHandler) end
-    self:enableHandlers()
     self.InstallHandler = nil
     print(f"Thank you for installing __PKGNAME__!")
     print("Right-click selected text in the output pane for copy functions.")
@@ -91,6 +91,8 @@ function __PKGNAME__:Uninstall(_, package)
   end
 end
 __PKGNAME__.UninstallHandler = __PKGNAME__.UninstallHandler or registerAnonymousEventHandler("sysUninstallPackage", "__PKGNAME__:Uninstall")
+
+__PKGNAME__:enableHandlers()
 
 -- Auto Updater
 __PKGNAME__ = __PKGNAME__ or {}
@@ -111,8 +113,8 @@ function __PKGNAME__:AutoMupdate(handle)
     registerNamedTimer(self.MupdateUser, self.MupdateUser, 2, function()
         deleteAllNamedTimers(self.MupdateUser)
 
-        local Mupdate = require("__PKGNAME__\\Mupdate")
-        local updater = Mupdate:new({
+        local __PKGNAME__Mupdate = require("__PKGNAME__\\Mupdate")
+        local updater = __PKGNAME__Mupdate:new({
             download_path = "https://github.com/gesslar/__PKGNAME__/releases/latest/download/",
             package_name = "__PKGNAME__",
             remote_version_file = "__PKGNAME___version.txt",
@@ -120,10 +122,7 @@ function __PKGNAME__:AutoMupdate(handle)
             param_regex = "attachment; filename=(.*)",
             debug_mode = true,
         })
-        updater:Start(function()
-            updater:Cleanup()
-            updater = nil
-        end)
+        updater:Start()
     end)
 end
 
