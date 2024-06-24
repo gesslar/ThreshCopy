@@ -6,9 +6,9 @@
               "script": ""
        },
        {
-              "isActive": "no",
+              "isActive": "yes",
               "isFolder": "no",
-              "name": "Copy Wrapped",
+              "name": "Updater",
               "script": ""
        }
 ]
