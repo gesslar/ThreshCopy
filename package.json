@@ -1,7 +1,8 @@
 {
+  "name": "threshcopy",
   "scripts": {
-    "build": "muddle",
-    "watch": "muddle -w"
+    "build": "pnpx @gesslar/muddy",
+    "watch": "pnpx @gesslar/muddy -w"
   },
-  "license": "Unlicense"
+  "license": "0BSD"
 }
