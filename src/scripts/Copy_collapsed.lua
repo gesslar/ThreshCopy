@@ -4,7 +4,7 @@ __PKGNAME__ = __PKGNAME__ or {
   LoadHandler = nil,
 }
 
-function __PKGNAME__:getSelectedText(window, startCol, startRow, endCol, endRow)
+function __PKGNAME__.getSelectedText(window, startCol, startRow, endCol, endRow)
   -- Check whether there's an actual selection
   if startCol == endCol and startRow == endRow then return "" end
   local parsed = ""
@@ -25,7 +25,7 @@ function __PKGNAME__:trim(s)
 end
 
 __PKGNAME__.handler = function(event, menu, ...)
-  local text = __PKGNAME__:getSelectedText(...)
+  local text = __PKGNAME__.getSelectedText(...)
   -- Split the text into lines, trim each line, and handle blank lines separately
   local lines = {}
   for line in text:gmatch("([^\n]*)\n?") do
@@ -53,7 +53,7 @@ __PKGNAME__.handler = function(event, menu, ...)
   end
 
   -- Remove any trailing newlines
-  withoutNewLines = withoutNewLines:gsub("%s*\n*$", "")
+  withoutNewLines = withoutNewLines:gsub("%s*\n*$", "") or ""
 
   setClipboardText(withoutNewLines)
 end
@@ -63,33 +63,38 @@ end
 -- ------------------------------------------------------------------- --
 
 function __PKGNAME__:enableHandlers()
-  addMouseEvent("Copy Collapsed", "copyWithoutNewLines")
+  addMouseEvent("Copy collapsed", "copyWithoutNewLines")
   registerNamedEventHandler("__PKGNAME__", "copy without new lines", "copyWithoutNewLines", self.handler)
 end
 
 function __PKGNAME__:disableHandlers()
-    removeMouseEvent("Copy Collapsed")
-    stopNamedEventHandler("__PKGNAME__", "copy without new lines")
+  removeMouseEvent("Copy collapsed")
+  stopNamedEventHandler("__PKGNAME__", "copy without new lines")
 end
 
 function __PKGNAME__:Install(_, package)
   if package == "__PKGNAME__" then
     if self.InstallHandler ~= nil then killAnonymousEventHandler(__PKGNAME__.InstallHandler) end
     self.InstallHandler = nil
-    print(f"Thank you for installing __PKGNAME__!")
-    print("Right-click selected text in the output pane for copy functions.")
+    cecho("<yellow_green>[__PKGNAME__]<r> Thank you for installing __PKGNAME__!\n")
+    cecho("\n")
+    cecho("Right-click selected text in any output pane for copy functions.\n")
   end
 end
-__PKGNAME__.InstallHandler = __PKGNAME__.InstallHandler or registerAnonymousEventHandler("sysInstallPackage", "__PKGNAME__:Install")
+
+__PKGNAME__.InstallHandler = __PKGNAME__.InstallHandler or
+    registerAnonymousEventHandler("sysInstallPackage", "__PKGNAME__:Install")
 
 function __PKGNAME__:Uninstall(_, package)
   if package == "__PKGNAME__" then
     if self.UninstallHandler ~= nil then killAnonymousEventHandler(self.UninstallHandler) end
     self:disableHandlers()
     self.UninstallHandler = nil
-    cecho(f"<red>You have uninstalled __PKGNAME__.\n")
+    cecho(f "<yellow_green>[__PKGNAME__]<r> You have uninstalled __PKGNAME__.\n")
   end
 end
-__PKGNAME__.UninstallHandler = __PKGNAME__.UninstallHandler or registerAnonymousEventHandler("sysUninstallPackage", "__PKGNAME__:Uninstall")
+
+__PKGNAME__.UninstallHandler = __PKGNAME__.UninstallHandler or
+    registerAnonymousEventHandler("sysUninstallPackage", "__PKGNAME__:Uninstall")
 
 __PKGNAME__:enableHandlers()
