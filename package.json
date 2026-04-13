@@ -1,5 +1,8 @@
 {
   "name": "threshcopy",
+  "author": {
+    "name": "gesslar"
+  },
   "scripts": {
     "build": "pnpx @gesslar/muddy",
     "watch": "pnpx @gesslar/muddy -w"

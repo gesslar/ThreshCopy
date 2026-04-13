@@ -1,9 +1,9 @@
 {
-  "package": "ThreshCopy",
-  "title": "Convenient copy functions for ThresholdRPG",
-  "version": "1.5.4",
+  "package": "Copier",
+  "title": "Convenient copy functions for Mudlet.",
+  "version": "2.0.0",
   "author": "gesslar",
-  "icon": "griffon-right.jpg",
+  "icon": "clipboard.png",
   "dependencies": "",
   "outputFile": true
 }
